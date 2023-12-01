@@ -3,21 +3,31 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import async_to_sync
 from django.utils import timezone
 from chat.entities.message import Message
+from chat.entities.chat_rooms import ChatRoom
 from django.contrib.auth.models import User
-from chat.services.messages_form import MessageForm
 from asgiref.sync import sync_to_async
 
 class ChatConsumer(AsyncWebsocketConsumer):
+
+
+
+    async def check_count(self):
+        pass
+
+
+
     async def connect(self):
         self.user = self.scope['user']
-        self.id = self.scope['url_route']['kwargs']['course_id']
+        self.id = self.scope['url_route']['kwargs']['id']
         self.room_group_name = f'chat_{self.id}'
+        room = await sync_to_async(ChatRoom.objects.get)(id = id)
+
         # join room group
         await self.channel_layer.group_add(
             self.room_group_name,
-            self.channel_name
+            self.channel_name,
+
         )
-        # accept connection
         await self.accept()
 
     async def disconnect(self, close_code):
@@ -53,9 +63,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         event['chatroom_id'] = self.id
         event['attachment'] = self.file
         message = await sync_to_async(Message.objects.create)(**event)
-        # form = MessageForm(**event)
-        # form.save()
-
+       
 
 
     async def chat_message(self, event,*args,**kwargs):

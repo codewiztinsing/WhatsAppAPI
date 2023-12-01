@@ -12,9 +12,7 @@ urlpatterns = [
     path('api/v1/',include("chat.controller.index")),
     path('api/schema/',SpectacularAPIView.as_view(),name="schema"),
     path("api/schema/docs",SpectacularSwaggerView.as_view(url_name = "schema")),
-    re_path(r'ws/chat/room/(?P<id>\d+)/$',ChatConsumer.as_asgi())
     
-
 ]
 
 
