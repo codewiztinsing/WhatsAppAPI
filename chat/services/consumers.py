@@ -2,7 +2,7 @@ import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import async_to_sync
 from django.utils import timezone
-
+from chat.entities.message import Message
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -44,4 +44,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
     # receive message from room group
     async def chat_message(self, event):
         # send message to WebSocket
+        print(event,"  event ")
+        await Message.objects.create(**event)
         await self.send(text_data=json.dumps(event))
