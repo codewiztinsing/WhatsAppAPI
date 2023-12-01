@@ -3,6 +3,8 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import async_to_sync
 from django.utils import timezone
 from chat.entities.message import Message
+from django.contrib.auth.models import User
+from asgiref.sync import sync_to_async
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -28,7 +30,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
-       
+        self.file = text_data_json.get('file')
         now = timezone.now()
         # send message to room group
         await self.channel_layer.group_send(
@@ -41,9 +43,26 @@ class ChatConsumer(AsyncWebsocketConsumer):
             }
         )
 
-    # receive message from room group
-    async def chat_message(self, event):
+    async def save_message(self, event):
+        user = await sync_to_async(User.objects.get)(username=event.get('user'))
+     
+        event['user'] = user
+        event.pop('type')
+        event['chatroom_id'] = self.id
+        event['attachment'] = self.file
+        message = await sync_to_async(Message.objects.create)(**event)
+
+
+
+    async def chat_message(self, event,*args,**kwargs):
+     
         # send message to WebSocket
-        print(event,"  event ")
-        await Message.objects.create(**event)
         await self.send(text_data=json.dumps(event))
+        await self.save_message(event)
+        
+
+
+
+
+
+

@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from chat.entities.chat_rooms import ChatRoom
-# from chat.entities.message import Message
+from chat.entities.message import Message
 from chat.services.room_form import RoomForm
 from django.shortcuts import redirect
 from django.urls import reverse
@@ -9,7 +9,13 @@ from django.urls import reverse
 
 #landing page for chat user
 def chat_room(request,id):
-    return render(request, 'chat/room.html', {'id': id})
+   
+    messages = None
+    try:
+        messages = Message.objects.filter(chatroom_id = id)
+    except Message.DoesNotExist as e:
+        print(e)
+    return render(request, 'chat/room.html', {'id': id,'messages':messages})
 
 
 # list of rooms avialable currently

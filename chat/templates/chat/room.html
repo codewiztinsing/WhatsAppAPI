@@ -6,7 +6,16 @@
   <div id="chat">
   </div>
   <div id="chat-input">
+    <div>
+
+        <ul>
+          {% for message in messages %}
+             <h1>{{message.user}} - <p>{{message}}</p> </h1>
+          {% endfor %}
+        </ul>      
+    </div>
     <input id="chat-message-input" type="text">
+    <input id="chat-file-input" type="file" >
     <input id="chat-message-submit" type="submit" value="Send">
 
     
@@ -48,13 +57,15 @@
   };
 
   const input = document.getElementById('chat-message-input');
+  const fileInput = document.getElementById('chat-file-input');
   const submitButton = document.getElementById('chat-message-submit');
 
   submitButton.addEventListener('click', function(event) {
     const message = input.value;
+  
     if(message) {
       // send message in JSON format
-      chatSocket.send(JSON.stringify({'message': message}));
+      chatSocket.send(JSON.stringify({'message': message,'file':fileInput.value}));
       // clear input
       input.value = '';
       input.focus();
