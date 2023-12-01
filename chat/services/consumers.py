@@ -4,6 +4,7 @@ from asgiref.sync import async_to_sync
 from django.utils import timezone
 from chat.entities.message import Message
 from django.contrib.auth.models import User
+from chat.services.messages_form import MessageForm
 from asgiref.sync import sync_to_async
 
 class ChatConsumer(AsyncWebsocketConsumer):
@@ -29,6 +30,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     # receive message from WebSocket
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
+        print(text_data_json)
         message = text_data_json['message']
         self.file = text_data_json.get('file')
         now = timezone.now()
@@ -51,6 +53,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
         event['chatroom_id'] = self.id
         event['attachment'] = self.file
         message = await sync_to_async(Message.objects.create)(**event)
+        # form = MessageForm(**event)
+        # form.save()
 
 
 

@@ -7,12 +7,14 @@
   </div>
   <div id="chat-input">
     <div>
+      {% for message in messages %}
+      <div class="message ' + source + '"> 
+        <strong> {{message.user.username }} </strong>  
+        <span class="date"> {{message.datetime}} </span><br> 
+        {{message.message }} </div>
 
-        <ul>
-          {% for message in messages %}
-             <h1>{{message.user}} - <p>{{message}}</p> </h1>
-          {% endfor %}
-        </ul>      
+        {% endfor %}
+          
     </div>
     <input id="chat-message-input" type="text">
     <input id="chat-file-input" type="file" >

@@ -1,10 +1,17 @@
 {% extends "base.html" %}
 
 {% block content %}
-<a href="{% url 'chat:create_chatroom' %} "><p>new chat room</p></a>
-<ul>
-    {% for room in chatrooms %} 
-    <a href="{% url 'chat:chat_room' room.id %}"> <p> {{room.name}}</p> </a>
-    {% endfor %}
-</ul>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+       
+
+        <ul class="list-group">
+          {% for room in chatrooms %}
+          <a href="{% url 'chat:chat_room' room.id %}" class="list-group-item list-group-item-action">{{ room.name }}</a>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
 {% endblock %}
