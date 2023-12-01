@@ -25,8 +25,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'channels',
+
+    
+    #my apps
     'chat',
+
+    # thrid party apps
+    'rest_framework',
+    'channels',
+    'drf_spectacular'
 
 ]
 
@@ -135,4 +142,15 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels.layers.InMemoryChannelLayer',
     },
+}
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS':'drf_spectacular.openapi.AutoSchema'
+
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE':'CHAT SERVER',
+
 }

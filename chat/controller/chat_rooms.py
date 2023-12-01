@@ -1,18 +1,14 @@
 from django.urls import path
-from chat.services.room import chatroom_list,create_chatroom,chat_room
+# from chat.services.room import chatroom_list,create_chatroom,chat_room
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from chat.services.room  import ChatRoomViewSet
 
 
-app_name = 'chat'
-
+# app_name = 'chat'
+router = DefaultRouter()
+router.register(r'chat-rooms', ChatRoomViewSet, basename='chat-rooms')
 
 urlpatterns = [
-path('room/<int:id>/', chat_room,
-         name='chat_room'),
-
-path('', chatroom_list,
-         name='chatroom_list'),
-
-
-path('create/', create_chatroom,
-         name='create_chatroom'),
+    path('', include(router.urls)),
 ]
