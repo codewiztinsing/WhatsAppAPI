@@ -56,7 +56,6 @@ Copy `.env_example` to `.env` file
 
     $ python3 manage.py runserver
 
-## Documentation
 
 
 
