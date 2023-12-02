@@ -1,3 +1,18 @@
+venv
+media
+static
+
+.env
+*.sqlite3
+*.sh
+*.bash
+*.conf
+*.key
+.domain
+.token
+*.js
+*.lock
+*.json
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
