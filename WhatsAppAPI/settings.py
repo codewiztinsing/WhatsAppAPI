@@ -154,3 +154,9 @@ SPECTACULAR_SETTINGS = {
     'TITLE':'CHAT SERVER',
 
 }
+
+
+
+# MIGRATION_MODULES = {
+#     'chat': BASE_DIR.join("repository")
+# }

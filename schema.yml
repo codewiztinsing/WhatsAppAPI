@@ -471,16 +471,11 @@ components:
           type: string
           format: date-time
           readOnly: true
-        active_client:
-          type: integer
-          maximum: 2147483647
-          minimum: -2147483648
         max_client:
           type: integer
           maximum: 2147483647
           minimum: -2147483648
       required:
-      - active_client
       - created_at
       - description
       - id
@@ -527,10 +522,6 @@ components:
           type: string
           format: date-time
           readOnly: true
-        active_client:
-          type: integer
-          maximum: 2147483647
-          minimum: -2147483648
         max_client:
           type: integer
           maximum: 2147483647
