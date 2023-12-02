@@ -5,7 +5,6 @@
 - create your working path and initiate your virtual environment
 - after that you may follow as below
 
-# Ashewa E-commerce Backend
 
 ## Python version
 
