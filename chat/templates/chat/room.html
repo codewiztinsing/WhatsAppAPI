@@ -11,20 +11,19 @@
   </div>
 {% endblock %}
 
+
+
 {% block include_js %}
-  {{ course.id|json_script:"course-id" }}
   {{ request.user.username|json_script:"request-user" }}
 {% endblock %}
 
 {% block domready %}
-  const courseId = JSON.parse(
-    document.getElementById('course-id').textContent
-  );
+ 
   const requestUser = JSON.parse(
     document.getElementById('request-user').textContent
   );
   const url = 'ws://' + window.location.host +
-              '/ws/chat/room/' + 1 + '/';
+              '/ws/chat/room/' + {{room}} + '/';
   const chatSocket = new WebSocket(url);
 
   chatSocket.onmessage = function(event) {
@@ -49,13 +48,15 @@
   };
 
   const input = document.getElementById('chat-message-input');
+  const fileInput = document.getElementById('chat-file-input');
   const submitButton = document.getElementById('chat-message-submit');
 
   submitButton.addEventListener('click', function(event) {
     const message = input.value;
+  
     if(message) {
       // send message in JSON format
-      chatSocket.send(JSON.stringify({'message': message}));
+      chatSocket.send(JSON.stringify({'message': message,'file':fileInput.value}));
       // clear input
       input.value = '';
       input.focus();

@@ -7,4 +7,5 @@ class HomePageView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['latest_rooms'] = ChatRoom.objects.all().order_by('-created_at')[:5]
+        context['room'] = 1
         return context
