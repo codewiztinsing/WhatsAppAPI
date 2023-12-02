@@ -5,7 +5,8 @@ class ChatRoom(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    count      = models.IntegerField()
+    active_client      = models.IntegerField()
+    max_client      = models.IntegerField()
 
 
     def __str__(self):

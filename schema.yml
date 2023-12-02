@@ -471,10 +471,20 @@ components:
           type: string
           format: date-time
           readOnly: true
+        active_client:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        max_client:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
       required:
+      - active_client
       - created_at
       - description
       - id
+      - max_client
       - name
     Message:
       type: object
@@ -482,10 +492,6 @@ components:
         id:
           type: integer
           readOnly: true
-        chatroom:
-          type: integer
-        user:
-          type: integer
         message:
           type: string
         attachment:
@@ -496,6 +502,10 @@ components:
           type: string
           format: date-time
           readOnly: true
+        chatroom:
+          type: integer
+        user:
+          type: integer
       required:
       - chatroom
       - datetime
@@ -517,16 +527,20 @@ components:
           type: string
           format: date-time
           readOnly: true
+        active_client:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        max_client:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
     PatchedMessage:
       type: object
       properties:
         id:
           type: integer
           readOnly: true
-        chatroom:
-          type: integer
-        user:
-          type: integer
         message:
           type: string
         attachment:
@@ -537,6 +551,10 @@ components:
           type: string
           format: date-time
           readOnly: true
+        chatroom:
+          type: integer
+        user:
+          type: integer
   securitySchemes:
     basicAuth:
       type: http

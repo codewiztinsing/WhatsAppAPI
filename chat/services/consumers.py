@@ -10,9 +10,19 @@ from asgiref.sync import sync_to_async
 class ChatConsumer(AsyncWebsocketConsumer):
 
 
+    # update count of rooom
+    async def update_room_client_count(room_id, action):
+        room = ChatRoom.objects.get(id=room_id)
 
-    async def check_count(self):
-        pass
+        if action == 'add':
+            room.active_clients += 1
+        elif action == 'remove':
+            room.active_clients -= 1
+
+        room.save()
+
+        return room.active_clients
+
 
 
 
@@ -20,21 +30,51 @@ class ChatConsumer(AsyncWebsocketConsumer):
         self.user = self.scope['user']
         self.id = self.scope['url_route']['kwargs']['id']
         self.room_group_name = f'chat_{self.id}'
-        room = await sync_to_async(ChatRoom.objects.get)(id = id)
 
-        # join room group
+
+        # Check client count before joining
+        room = await sync_to_async(ChatRoom.objects.get)(id=self.id)
+        if room.active_clients >= room.max_clients:
+            await self.send_message({
+                'type': 'error',
+                'message': 'Room is full'
+            })
+            await self.close(code=403)  # Forbidden
+
+        # Join room group and update client count
         await self.channel_layer.group_add(
             self.room_group_name,
             self.channel_name,
 
         )
+        await sync_to_async(update_room_client_count)(room_id=self.id, action='add')
+    
         await self.accept()
 
+    async def get_room_client_count(room_id):
+        room = ChatRoom.objects.get(id=room_id)
+        return room.active_clients
+
+
     async def disconnect(self, close_code):
+        
+        # Update client count on disconnect
+        await sync_to_async(update_room_client_count)(room_id=self.id, action='remove')
+
+
         # leave room group
         await self.channel_layer.group_discard(
             self.room_group_name,
             self.channel_name
+        )
+
+         # Broadcast room status update
+        await self.channel_layer.group_send(
+            self.room_group_name,
+            {
+                'type': 'room_status',
+                'active_clients': await sync_to_async(get_room_client_count)(room_id=self.id)
+            }
         )
 
     # receive message from WebSocket
