@@ -4,4 +4,5 @@ from chat.entities.chat_rooms import ChatRoom
 class RoomForm(ModelForm):
     class Meta:
         model = ChatRoom
-        fields = "__all__"
+        # fields = "__all__"
+        exclude = "active_client",
