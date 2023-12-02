@@ -3,6 +3,6 @@ from chat.services import consumers
 
 
 websocket_urlpatterns = [
-    re_path(r'ws/chat/room/(?P<course_id>\d+)/$',
+    re_path(r'ws/chat/room/(?P<id>\d+)/$',
             consumers.ChatConsumer.as_asgi()),
 ]
