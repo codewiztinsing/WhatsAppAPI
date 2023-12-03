@@ -55,7 +55,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             self.room_group_name,
             {
                 'type': 'chat_error',
-                'message': f"maxmium number of user reached ",
+                'message': f"maxmium number of user reached or you are not loggedin",
                 'user': self.user.username,
                
             }

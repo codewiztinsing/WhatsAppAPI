@@ -1,0 +1,23 @@
+{% extends 'base.html'%}
+
+{% block content %}
+    <div class="container">
+        <h1>Login</h1>
+
+        {% if form.errors %}
+            <div class="alert alert-danger" role="alert">
+                {% for error in form.errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Login</button>
+        </form>
+
+        <p>Don't have an account? <a href="{% url 'register' %}">Register</a></p>
+    </div>
+{% endblock %}
