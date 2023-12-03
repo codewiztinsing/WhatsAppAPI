@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
-from room.entities.message import Message
+from chat.entities.message import Message
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from chat.services.messages_seriliazers import MessageSerializer
