@@ -26,7 +26,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'channels',
+    #my apps
     'chat',
+
+    # thrid party apps
+    'rest_framework',
+    'channels',
+    'drf_spectacular'
+,
 
 ]
 
