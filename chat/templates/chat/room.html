@@ -39,6 +39,7 @@
 
   chatSocket.onmessage = function(event) {
     const data = JSON.parse(event.data);
+    
     const chat = document.getElementById('chat');
 
     const dateOptions = {hour: 'numeric', minute: 'numeric', hour12: true};
@@ -46,6 +47,12 @@
     const isMe = data.user === requestUser;
     const source = isMe ? 'me' : 'other';
     const name = isMe ? 'Me' : data.user;
+
+    if(data.type === 'chat_error') {
+      chat.innerHTML += '<div class="alert alert-primary" role="alert">' +
+        '<strong>' + data.message + '</strong> '
+        chat.scrollTop = chat.scrollHeight;
+    }
 
     chat.innerHTML += '<div class="message ' + source + '">' +
                       '<strong>' + name + '</strong> ' +

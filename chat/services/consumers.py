@@ -37,27 +37,38 @@ class ChatConsumer(AsyncWebsocketConsumer):
         self.room_group_name = f'chat_{self.id}'
         
 
-
-        # Check client count before joining
-        room = await sync_to_async(ChatRoom.objects.get)(id=self.id)
-        if room.active_client >= room.max_client:
-        
-         # Broadcast room status update
-            await self.channel_layer.group_send(
-                self.room_group_name,
-                {
-                    'type': 'error',
-                    'active_clients': await sync_to_async(self.get_room_client_count)(room_id=self.id)
-                }
-            )
-            # await self.close(code=403)  # Forbidden
-
         # Join room group and update client count
         await self.channel_layer.group_add(
             self.room_group_name,
             self.channel_name,
 
         )
+
+
+                # Check client count before joining
+        room = await sync_to_async(ChatRoom.objects.get)(id=self.id)
+        if room.active_client >= room.max_client:
+        
+         # Broadcast room status update
+            await self.channel_layer.group_send(
+              
+            self.room_group_name,
+            {
+                'type': 'chat_error',
+                'message': f"maxmium number of user reached ",
+                'user': self.user.username,
+               
+            }
+            )
+               # leave room group
+            await self.channel_layer.group_discard(
+                self.room_group_name,
+                self.channel_name
+            )
+            print(room.active_client,room.max_client,"room info")
+
+
+
         room_id = self.scope['url_route']['kwargs']['course_id']
         await sync_to_async(self.update_room_client_count)(room_id=room_id, action='add')
     
@@ -90,7 +101,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     # receive message from WebSocket
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
-        print(text_data_json)
+ 
         message = text_data_json['message']
         self.file = text_data_json.get('file')
         now = timezone.now()
@@ -118,10 +129,20 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
 
     async def chat_message(self, event,*args,**kwargs):
-     
+
+
         # send message to WebSocket
         await self.send(text_data=json.dumps(event))
         await self.save_message(event)
+
+
+
+    
+    async def chat_error(self, event,*args,**kwargs):
+
+        # send message to WebSocket
+        await self.send(text_data=json.dumps(event))
+    
         
 
 
