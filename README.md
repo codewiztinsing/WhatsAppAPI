@@ -58,4 +58,9 @@ Copy `.env_example` to `.env` file
 
 
 
+## swagger ui
+    $ http://127.0.0.1:8000/api/schema/docs
+
+
+
 
